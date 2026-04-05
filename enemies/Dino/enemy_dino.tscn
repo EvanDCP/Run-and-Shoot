@@ -1,0 +1,168 @@
+[gd_scene load_steps=24 format=3 uid="uid://bdjq3v3hkoiay"]
+
+[ext_resource type="Script" uid="uid://b35rgjs0w5e80" path="res://enemies/Dino/enemy_dino.gd" id="1_5cg2o"]
+[ext_resource type="Texture2D" uid="uid://djkam8jeutt4f" path="res://enemies/Dino/dino.png" id="1_tfji5"]
+[ext_resource type="Texture2D" uid="uid://ghna2msx7uu0" path="res://enemies/Dino/dino-idle.png" id="2_jf3uc"]
+[ext_resource type="Script" uid="uid://ds0gbveqvhvix" path="res://enemies/Dino/gravity.gd" id="3_jf3uc"]
+[ext_resource type="Script" uid="uid://bd7x41tcbeg12" path="res://scripts/state_machine/node_finite_state_machine.gd" id="4_860du"]
+[ext_resource type="Script" uid="uid://clf3siaj3uwka" path="res://enemies/Dino/state_machine_controller.gd" id="4_q007f"]
+[ext_resource type="Script" uid="uid://b73e0unvbo7fe" path="res://enemies/Dino/idle_state.gd" id="5_4sock"]
+[ext_resource type="Script" uid="uid://bkefi1026y1jm" path="res://enemies/Dino/attack_state.gd" id="6_c465k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_860du"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(0, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sock"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(32, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c465k"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(64, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q007f"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(96, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6i4hx"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(128, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5cg2o"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(160, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bo61v"]
+atlas = ExtResource("1_tfji5")
+region = Rect2(192, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0rlbm"]
+atlas = ExtResource("2_jf3uc")
+region = Rect2(0, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1goi"]
+atlas = ExtResource("2_jf3uc")
+region = Rect2(32, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssdcw"]
+atlas = ExtResource("2_jf3uc")
+region = Rect2(64, 0, 32, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwsfw"]
+atlas = ExtResource("2_jf3uc")
+region = Rect2(96, 0, 32, 26)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_33eu3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_860du")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4sock")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c465k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q007f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6i4hx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5cg2o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bo61v")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0rlbm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1goi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssdcw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwsfw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_860du"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6i4hx"]
+size = Vector2(281, 67)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q007f"]
+radius = 12.0416
+
+[node name="EnemyDino" type="CharacterBody2D" groups=["Enemy"]]
+collision_layer = 4
+script = ExtResource("1_5cg2o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -13)
+sprite_frames = SubResource("SpriteFrames_33eu3")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.612347
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_860du")
+
+[node name="Gravity" type="Node" parent="." node_paths=PackedStringArray("character_body_2d", "animated_sprite_2d")]
+script = ExtResource("3_jf3uc")
+character_body_2d = NodePath("..")
+animated_sprite_2d = NodePath("../AnimatedSprite2D")
+
+[node name="StateMachineController" type="Node" parent="." node_paths=PackedStringArray("node_finite_state_machine")]
+script = ExtResource("4_q007f")
+node_finite_state_machine = NodePath("../StateMachine")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_node_state")]
+script = ExtResource("4_860du")
+initial_node_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("character_body_2d", "animated_sprite_2d")]
+script = ExtResource("5_4sock")
+character_body_2d = NodePath("../..")
+animated_sprite_2d = NodePath("../../AnimatedSprite2D")
+
+[node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("character_body_2d", "animated_sprite_2d")]
+script = ExtResource("6_c465k")
+character_body_2d = NodePath("../..")
+animated_sprite_2d = NodePath("../../AnimatedSprite2D")
+
+[node name="AttackArea2D" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea2D"]
+position = Vector2(0, -33)
+shape = SubResource("RectangleShape2D_6i4hx")
+debug_color = Color(0.754668, 0.452074, 0.170311, 0.42)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_q007f")
+debug_color = Color(0.998364, 0, 0.143922, 0.42)
+
+[connection signal="body_entered" from="AttackArea2D" to="StateMachineController" method="_on_attack_area_2d_body_entered"]
+[connection signal="body_exited" from="AttackArea2D" to="StateMachineController" method="_on_attack_area_2d_body_exited"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]

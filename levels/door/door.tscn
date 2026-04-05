@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=3 uid="uid://cgdfcgaj02w4u"]
+
+[ext_resource type="Script" uid="uid://f5mnc4di1ypy" path="res://levels/door/door.gd" id="1_gxcpb"]
+[ext_resource type="Texture2D" uid="uid://c5wra3pi2oi47" path="res://levels/door/gate-03.png" id="2_u70jo"]
+[ext_resource type="Texture2D" uid="uid://ces7gwqhf28o" path="res://levels/door/gate-02.png" id="3_0w423"]
+[ext_resource type="Texture2D" uid="uid://b4ff6npjp453q" path="res://levels/door/gate-01.png" id="4_51p5e"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wi0yu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_u70jo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0w423")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_51p5e")
+}],
+"loop": false,
+"name": &"close",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_51p5e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0w423")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_u70jo")
+}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_51p5e"]
+size = Vector2(36, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0w423"]
+size = Vector2(6, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wi0yu"]
+size = Vector2(63, 48)
+
+[node name="Door" type="StaticBody2D"]
+script = ExtResource("1_gxcpb")
+next_scene = "Level1"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(24, -24)
+sprite_frames = SubResource("SpriteFrames_wi0yu")
+animation = &"close"
+autoplay = "close"
+frame = 1
+frame_progress = 0.282504
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(18, -24)
+shape = SubResource("RectangleShape2D_51p5e")
+
+[node name="ExitArea2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea2D"]
+position = Vector2(3, -24)
+shape = SubResource("RectangleShape2D_0w423")
+debug_color = Color(0.691666, 0.479804, 0.36434, 0.42)
+
+[node name="ActivateArea2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActivateArea2D"]
+position = Vector2(68.5, -24)
+shape = SubResource("RectangleShape2D_wi0yu")
+debug_color = Color(0.596455, 0.538417, 0.243055, 0.42)
+
+[connection signal="body_entered" from="ExitArea2D" to="." method="_on_exit_area_2d_body_entered"]
+[connection signal="body_entered" from="ActivateArea2D" to="." method="_on_activate_area_2d_body_entered"]
+[connection signal="body_exited" from="ActivateArea2D" to="." method="_on_activate_area_2d_body_exited"]
