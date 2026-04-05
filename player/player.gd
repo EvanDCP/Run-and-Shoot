@@ -3,11 +3,14 @@ extends CharacterBody2D
 var bullet = preload("res://player/bullet.tscn")
 var player_death_effect = preload("res://player/player_death_effect/player_death_effect.tscn")
 
+#import var
 @onready var animated_sprite_2d = $AnimatedSprite2D
 @onready var muzzle : Marker2D = $Muzzle
 @onready var hit_animation_player = $HitAnimationPlayer
 
 const GRAVITY = 1000
+
+#export var
 @export var speed : int = 1000
 @export var max_horizontal_speed : int = 300
 @export var slow_down_speed : int = 3000
